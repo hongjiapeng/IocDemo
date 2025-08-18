@@ -4,7 +4,7 @@ using WpfIocDemo.ViewModels;
 namespace WpfIocDemo;
 
 /// <summary>
-/// 主窗口 - 演示依赖注入在 WPF 中的应用
+/// Main window - Demonstrates the application of dependency injection in WPF
 /// </summary>
 public partial class MainWindow : Window
 {
@@ -12,7 +12,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         
-        // 设置 DataContext 为注入的 ViewModel
+        // Set DataContext to the injected ViewModel
         DataContext = viewModel;
     }
 }

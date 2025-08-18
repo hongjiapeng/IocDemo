@@ -5,7 +5,7 @@ using System.Windows;
 namespace WpfIocDemo;
 
 /// <summary>
-/// 演示在 WPF 应用程序中使用 IoC 容器
+/// Demonstrates the use of IoC container in WPF applications
 /// </summary>
 public partial class App : Application
 {
@@ -13,22 +13,22 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // 创建和配置 Host
+        // Create and configure Host
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                // 注册应用程序服务
+                // Register application services
                 services.AddApplicationServices();
                 
-                // 注册 ViewModels
+                // Register ViewModels
                 services.AddViewModels();
                 
-                // 注册 Views
+                // Register Views
                 services.AddViews();
             })
             .Build();
 
-        // 从容器中获取主窗口并显示
+        // Get main window from container and show it
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
 
@@ -37,7 +37,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        // 释放资源
+        // Release resources
         _host?.Dispose();
         base.OnExit(e);
     }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WpfIocDemo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+906da502c14b725f925f4160e7524fc9c494fa0b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f05b4c9e141f6f538c331c54f595faf7cd5e81c")]
 [assembly: System.Reflection.AssemblyProductAttribute("WpfIocDemo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WpfIocDemo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

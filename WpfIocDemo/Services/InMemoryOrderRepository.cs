@@ -3,7 +3,7 @@ using WpfIocDemo.Contracts;
 namespace WpfIocDemo.Services
 {
     /// <summary>
-    /// 内存订单仓储实现
+    /// In-memory order repository implementation
     /// </summary>
     public class InMemoryOrderRepository : IOrderRepository
     {
@@ -12,7 +12,7 @@ namespace WpfIocDemo.Services
         public string Save(string orderId)
         {
             _orders.Add(orderId);
-            return $"📦 订单 {orderId} 已保存到内存 (共 {_orders.Count} 个订单)";
+            return $"📦 Order {orderId} saved to memory (total {_orders.Count} orders)";
         }
 
         public string[] GetAllOrders()

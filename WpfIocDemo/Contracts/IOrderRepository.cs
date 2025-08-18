@@ -1,7 +1,7 @@
 namespace WpfIocDemo.Contracts
 {
     /// <summary>
-    /// 订单仓储接口
+    /// Order repository interface
     /// </summary>
     public interface IOrderRepository
     {

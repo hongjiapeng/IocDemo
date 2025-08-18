@@ -1,7 +1,7 @@
 namespace WpfIocDemo.Contracts
 {
     /// <summary>
-    /// 消息发送器接口 - 演示依赖反转原则
+    /// Message sender interface - Demonstrates dependency inversion principle
     /// </summary>
     public interface IMessageSender
     {

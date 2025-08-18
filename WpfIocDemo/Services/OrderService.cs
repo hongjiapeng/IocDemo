@@ -3,14 +3,14 @@ using WpfIocDemo.Contracts;
 namespace WpfIocDemo.Services
 {
     /// <summary>
-    /// 订单服务 - 演示构造函数注入
+    /// Order service - Demonstrates constructor injection
     /// </summary>
     public class OrderService
     {
         private readonly IOrderRepository _repository;
         private readonly IMessageSender _messageSender;
 
-        // 构造函数注入：依赖关系清晰，不可变
+        // Constructor injection: Dependencies are clear and immutable
         public OrderService(IOrderRepository repository, IMessageSender messageSender)
         {
             _repository = repository;
@@ -19,11 +19,11 @@ namespace WpfIocDemo.Services
 
         public string PlaceOrder(string orderId)
         {
-            // 1. 保存订单
+            // 1. Save order
             var saveResult = _repository.Save(orderId);
             
-            // 2. 发送通知
-            var notifyResult = _messageSender.Send($"订单 {orderId} 处理完成");
+            // 2. Send notification
+            var notifyResult = _messageSender.Send($"Order {orderId} processed");
             
             return $"{saveResult}\n{notifyResult}";
         }
@@ -31,7 +31,7 @@ namespace WpfIocDemo.Services
         public string GetOrderSummary()
         {
             var orders = _repository.GetAllOrders();
-            return $"当前共有 {orders.Length} 个订单: [{string.Join(", ", orders)}]";
+            return $"Currently {orders.Length} orders: [{string.Join(", ", orders)}]";
         }
     }
 }

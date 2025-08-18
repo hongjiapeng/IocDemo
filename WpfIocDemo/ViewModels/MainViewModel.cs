@@ -6,19 +6,19 @@ using WpfIocDemo.Services;
 namespace WpfIocDemo.ViewModels
 {
     /// <summary>
-    /// 主窗口的ViewModel - 演示在WPF中使用依赖注入
+    /// Main window ViewModel - Demonstrates the use of dependency injection in WPF
     /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly OrderService _orderService;
-        private string _output = "欢迎使用 IoC 演示程序！\n点击按钮查看不同的 IoC 演示效果。";
+        private string _output = "Welcome to IoC Demo Program!\nClick buttons to see different IoC demonstration effects.";
         private string _orderIdInput = "ORD001";
 
         public MainViewModel(OrderService orderService)
         {
             _orderService = orderService;
             
-            // 初始化命令
+            // Initialize commands
             PlaceOrderCommand = new RelayCommand(PlaceOrder);
             ShowOrdersCommand = new RelayCommand(ShowOrders);
             ClearOutputCommand = new RelayCommand(ClearOutput);
@@ -52,15 +52,15 @@ namespace WpfIocDemo.ViewModels
         {
             if (string.IsNullOrWhiteSpace(OrderIdInput))
             {
-                AppendOutput("❌ 订单ID不能为空");
+                AppendOutput("❌ Order ID cannot be empty");
                 return;
             }
 
             var result = _orderService.PlaceOrder(OrderIdInput);
-            AppendOutput($"\n🎯 处理订单 {OrderIdInput}:");
+            AppendOutput($"\n🎯 Processing order {OrderIdInput}:");
             AppendOutput(result);
             
-            // 自动递增订单ID
+            // Auto-increment order ID
             if (OrderIdInput.StartsWith("ORD"))
             {
                 var numberPart = OrderIdInput.Substring(3);
@@ -74,13 +74,13 @@ namespace WpfIocDemo.ViewModels
         private void ShowOrders()
         {
             var summary = _orderService.GetOrderSummary();
-            AppendOutput($"\n📊 订单汇总:");
+            AppendOutput($"\n📊 Order Summary:");
             AppendOutput(summary);
         }
 
         private void ClearOutput()
         {
-            Output = "输出已清空...";
+            Output = "Output cleared...";
         }
 
         private void AppendOutput(string text)
@@ -97,7 +97,7 @@ namespace WpfIocDemo.ViewModels
     }
 
     /// <summary>
-    /// 简单的 RelayCommand 实现
+    /// Simple RelayCommand implementation
     /// </summary>
     public class RelayCommand : ICommand
     {

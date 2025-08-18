@@ -3,13 +3,13 @@ using WpfIocDemo.Contracts;
 namespace WpfIocDemo.Services
 {
     /// <summary>
-    /// 短信发送器实现
+    /// SMS sender implementation
     /// </summary>
     public class SmsSender : IMessageSender
     {
         public string Send(string message)
         {
-            return $"📱 短信发送: {message} (通过 SmsSender)";
+            return $"📱 SMS sent: {message} (via SmsSender)";
         }
     }
 }
