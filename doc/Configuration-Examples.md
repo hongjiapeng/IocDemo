@@ -4,22 +4,31 @@ This document shows how to easily switch between different implementations using
 
 ## Switching Message Providers
 
-### Using Email Sender (Default)
+### Using Email Sender
 
 In `Program.cs` or `App.xaml.cs`:
 
 ```csharp
-services.AddIocDemoCore(useEmailSender: true);
-// OR simply
-services.AddIocDemoCore(); // Email is default
+services.AddIocDemoCore()
+        .AddEmailSender();
+// OR use the convenience method
+services.AddIocDemoCoreWithEmail();
 ```
 
 ### Using SMS Sender
 
 ```csharp
-services.AddIocDemoCore(useEmailSender: false);
-// OR
+services.AddIocDemoCore()
+        .AddSmsSender();
+// OR use the convenience method
 services.AddIocDemoCoreWithSms();
+```
+
+### Using Custom Message Sender
+
+```csharp
+services.AddIocDemoCore()
+        .AddMessageSender<MyCustomSender>();
 ```
 
 ## Custom Configuration Example
@@ -83,7 +92,8 @@ public void OrderService_WithEmailSender_ShouldUseEmail()
 {
     // Arrange
     var services = new ServiceCollection();
-    services.AddIocDemoCore(useEmailSender: true);
+    services.AddIocDemoCore()
+            .AddEmailSender();
     using var provider = services.BuildServiceProvider();
     
     // Act

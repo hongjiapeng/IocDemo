@@ -22,7 +22,8 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 // Register core services
-                services.AddIocDemoCore();
+                services.AddIocDemoCore()
+                        .AddEmailSender(); // Use email sender as default
                 
                 // Register ViewModels
                 services.AddTransient<MainViewModel>();

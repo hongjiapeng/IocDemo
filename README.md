@@ -105,13 +105,21 @@ The WPF application demonstrates:
 In `ServiceCollectionExtensions.cs`, you can easily switch between email and SMS:
 
 ```csharp
-// Use Email (default)
-services.AddIocDemoCore(useEmailSender: true);
+// Use Email
+services.AddIocDemoCore()
+        .AddEmailSender();
+// OR use convenience method
+services.AddIocDemoCoreWithEmail();
 
 // Use SMS instead
-services.AddIocDemoCore(useEmailSender: false);
-// OR
+services.AddIocDemoCore()
+        .AddSmsSender();
+// OR use convenience method
 services.AddIocDemoCoreWithSms();
+
+// Use custom implementation
+services.AddIocDemoCore()
+        .AddMessageSender<MyCustomSender>();
 ```
 
 ### Logging Configuration

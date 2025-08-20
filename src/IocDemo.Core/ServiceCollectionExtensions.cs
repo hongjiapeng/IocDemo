@@ -13,12 +13,12 @@ namespace IocDemo.Core;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers all core application services
+    /// Registers core application services (without message sender)
+    /// Call AddEmailSender() or AddSmsSender() or AddMessageSender&lt;T&gt;() to register a message sender
     /// </summary>
     /// <param name="services">The service collection</param>
-    /// <param name="useEmailSender">If true, uses EmailSender; otherwise uses SmsSender</param>
     /// <returns>The service collection for chaining</returns>
-    public static IServiceCollection AddIocDemoCore(this IServiceCollection services, bool useEmailSender = true)
+    public static IServiceCollection AddIocDemoCore(this IServiceCollection services)
     {
         // Configure Serilog
         Log.Logger = new LoggerConfiguration()
@@ -38,16 +38,6 @@ public static class ServiceCollectionExtensions
 
         // Register services with different lifetimes
         
-        // Message sender - can be easily switched
-        if (useEmailSender)
-        {
-            services.AddSingleton<IMessageSender, EmailSender>();
-        }
-        else
-        {
-            services.AddSingleton<IMessageSender, SmsSender>();
-        }
-        
         // Repository - Scoped for potential future database contexts
         services.AddScoped<IOrderRepository, InMemoryOrderRepository>();
         
@@ -58,12 +48,54 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers core services with SMS sender
+    /// Registers EmailSender as the message sender implementation
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddEmailSender(this IServiceCollection services)
+    {
+        return services.AddSingleton<IMessageSender, EmailSender>();
+    }
+
+    /// <summary>
+    /// Registers SmsSender as the message sender implementation
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddSmsSender(this IServiceCollection services)
+    {
+        return services.AddSingleton<IMessageSender, SmsSender>();
+    }
+
+    /// <summary>
+    /// Registers a custom message sender implementation
+    /// </summary>
+    /// <typeparam name="T">The message sender implementation type</typeparam>
+    /// <param name="services">The service collection</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddMessageSender<T>(this IServiceCollection services) 
+        where T : class, IMessageSender
+    {
+        return services.AddSingleton<IMessageSender, T>();
+    }
+
+    /// <summary>
+    /// Convenience method: Registers core services with EmailSender
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddIocDemoCoreWithEmail(this IServiceCollection services)
+    {
+        return services.AddIocDemoCore().AddEmailSender();
+    }
+
+    /// <summary>
+    /// Convenience method: Registers core services with SmsSender
     /// </summary>
     /// <param name="services">The service collection</param>
     /// <returns>The service collection for chaining</returns>
     public static IServiceCollection AddIocDemoCoreWithSms(this IServiceCollection services)
     {
-        return services.AddIocDemoCore(useEmailSender: false);
+        return services.AddIocDemoCore().AddSmsSender();
     }
 }

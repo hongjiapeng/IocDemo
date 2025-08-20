@@ -18,7 +18,8 @@ public class DependencyInjectionIntegrationTests : IDisposable
     public DependencyInjectionIntegrationTests()
     {
         var services = new ServiceCollection();
-        services.AddIocDemoCore();
+        services.AddIocDemoCore()
+                .AddEmailSender(); // Use email sender for testing
         _serviceProvider = services.BuildServiceProvider();
     }
 
