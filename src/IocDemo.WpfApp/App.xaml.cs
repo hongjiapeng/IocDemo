@@ -23,7 +23,11 @@ public partial class App : Application
             {
                 // Register core services
                 services.AddIocDemoCore()
-                        .AddEmailSender(); // Use email sender as default
+                        .AddEmailSender();  // 设置默认的消息发送器
+                
+                // 同时注册所有类型的发送器供Demo使用
+                services.AddTransient<EmailSender>();
+                services.AddTransient<SmsSender>();
                 
                 // Register ViewModels
                 services.AddTransient<MainViewModel>();

@@ -13,25 +13,35 @@ namespace IocDemo.WpfApp;
 public class MainViewModel : INotifyPropertyChanged
 {
     private readonly OrderService _orderService;
+    private readonly EmailSender _emailSender;
+    private readonly SmsSender _smsSender;
     private readonly ILogger<MainViewModel> _logger;
     private string _orderIdInput = "ORDER-001";
     private string _output = "Welcome to IoC Demo! 🎉\n\nReady to process orders...\n\n";
     private string _messageSenderType = "";
+    private string _currentSenderType = "Email";
 
     /// <summary>
     /// Initializes a new instance of the MainViewModel class
     /// </summary>
     /// <param name="orderService">Order service (injected by DI container)</param>
+    /// <param name="emailSender">Email sender (injected by DI container)</param>
+    /// <param name="smsSender">SMS sender (injected by DI container)</param>
     /// <param name="logger">Logger instance for logging operations</param>
-    public MainViewModel(OrderService orderService, ILogger<MainViewModel> logger)
+    public MainViewModel(OrderService orderService, EmailSender emailSender, SmsSender smsSender, ILogger<MainViewModel> logger)
     {
         _orderService = orderService;
+        _emailSender = emailSender;
+        _smsSender = smsSender;
         _logger = logger;
         
         // Initialize commands
         PlaceOrderCommand = new RelayCommand(PlaceOrder, CanPlaceOrder);
         ShowOrdersCommand = new RelayCommand(ShowOrders);
         ClearOutputCommand = new RelayCommand(ClearOutput);
+        SwitchToEmailCommand = new RelayCommand(SwitchToEmail);
+        SwitchToSmsCommand = new RelayCommand(SwitchToSms);
+        ProcessOrderDynamicCommand = new RelayCommand(ProcessOrderDynamic, CanPlaceOrder);
         
         // Get message sender type
         _messageSenderType = _orderService.GetMessageSenderType();
@@ -73,6 +83,11 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand PlaceOrderCommand { get; }
     public ICommand ShowOrdersCommand { get; }
     public ICommand ClearOutputCommand { get; }
+    public ICommand SwitchToEmailCommand { get; }
+    public ICommand SwitchToSmsCommand { get; }
+    public ICommand ProcessOrderDynamicCommand { get; }
+
+    public string CurrentSenderType => _currentSenderType.ToString();
 
     private void PlaceOrder()
     {
@@ -135,6 +150,55 @@ public class MainViewModel : INotifyPropertyChanged
     private void AppendOutput(string message)
     {
         Output += message + "\n";
+    }
+
+    private void SwitchToEmail()
+    {
+        _currentSenderType = Core.Services.MessageSenderType.Email;
+        _dynamicOrderService.SwitchDefaultSender(_currentSenderType);
+        AppendOutput($"🔄 Switched to Email sender");
+        OnPropertyChanged(nameof(CurrentSenderType));
+        _logger.LogInformation("User switched to Email sender");
+    }
+
+    private void SwitchToSms()
+    {
+        _currentSenderType = Core.Services.MessageSenderType.Sms;
+        _dynamicOrderService.SwitchDefaultSender(_currentSenderType);
+        AppendOutput($"🔄 Switched to SMS sender");
+        OnPropertyChanged(nameof(CurrentSenderType));
+        _logger.LogInformation("User switched to SMS sender");
+    }
+
+    private void ProcessOrderDynamic()
+    {
+        try
+        {
+            var orderId = OrderIdInput;
+            
+            AppendOutput($"🚀 Processing order {orderId} with current sender ({CurrentSenderType})...");
+            
+            var success = _dynamicOrderService.ProcessOrder(orderId);
+            
+            if (success)
+            {
+                AppendOutput($"✅ Order {orderId} processed successfully!");
+                
+                // Show summary
+                var summary = _dynamicOrderService.GetOrderSummary();
+                AppendOutput($"📊 {summary}");
+            }
+            else
+            {
+                AppendOutput($"❌ Failed to process order {orderId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = $"❌ Error processing order: {ex.Message}";
+            AppendOutput(errorMessage);
+            _logger.LogError(ex, "Error in ProcessOrderDynamic");
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

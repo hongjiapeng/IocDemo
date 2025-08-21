@@ -142,8 +142,91 @@
                     </Button>
                 </StackPanel>
                 
-                <TextBlock Text="💡 Tip: Try placing multiple orders and check the summary to see how data flows through the IoC container!"
-                          FontStyle="Italic" Foreground="#495057" FontSize="11"/>
+                <!-- Dynamic Sender Control -->
+                <Border Background="#E7F3FF" Padding="10" Margin="0,10,0,0" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="� Dynamic Message Sender Control" FontWeight="Bold" Margin="0,0,0,8" Foreground="#0066CC"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="Current Sender:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding CurrentSenderType}" VerticalAlignment="Center" 
+                                      FontWeight="Bold" Foreground="#0066CC" Margin="0,0,15,0"/>
+                            
+                            <Button Content="📧 Switch to Email" 
+                                    Command="{Binding SwitchToEmailCommand}"
+                                    Padding="10,5" Margin="0,0,8,0"
+                                    Background="#17A2B8" Foreground="White" 
+                                    BorderThickness="0" FontSize="11">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" 
+                                                            CornerRadius="3" 
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button Content="📱 Switch to SMS" 
+                                    Command="{Binding SwitchToSmsCommand}"
+                                    Padding="10,5" Margin="0,0,8,0"
+                                    Background="#FFC107" Foreground="Black" 
+                                    BorderThickness="0" FontSize="11">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" 
+                                                            CornerRadius="3" 
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button Content="🚀 Process with Current Sender" 
+                                    Command="{Binding ProcessOrderDynamicCommand}"
+                                    Padding="10,5"
+                                    Background="#DC3545" Foreground="White" 
+                                    BorderThickness="0" FontSize="11">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" 
+                                                            CornerRadius="3" 
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Text="💡 Switch between Email and SMS senders at runtime!" 
+                                  FontStyle="Italic" Foreground="#0066CC" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                
+                <TextBlock Text="�💡 Tip: Try placing multiple orders and check the summary to see how data flows through the IoC container!"
+                          FontStyle="Italic" Foreground="#495057" FontSize="11" Margin="0,10,0,0"/>
             </StackPanel>
         </Border>
         

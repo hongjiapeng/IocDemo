@@ -44,6 +44,10 @@ public static class ServiceCollectionExtensions
         // Business service - Transient for stateless operations
         services.AddTransient<OrderService>();
         
+        // Dynamic message sender support
+        services.AddSingleton<IMessageSenderFactory, MessageSenderFactory>();
+        services.AddTransient<DynamicOrderService>();
+        
         return services;
     }
 
