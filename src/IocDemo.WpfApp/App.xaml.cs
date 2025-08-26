@@ -16,14 +16,23 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // Configure Serilog at application level
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File("logs/iocdemo-.txt", 
+                rollingInterval: RollingInterval.Day,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
+            .CreateLogger();
+
         // Create and configure Host with Serilog
         _host = Host.CreateDefaultBuilder()
             .UseSerilog() // Use Serilog as the logging provider
             .ConfigureServices((context, services) =>
             {
-                // Register core services
+                // Register core services (without logging configuration)
                 services.AddIocDemoCore()
-                        .AddSmsSender(); // Use email sender as default
+                        .AddSmsSender(); // Use SMS sender as default
                 
                 // Register ViewModels
                 services.AddTransient<MainViewModel>();
