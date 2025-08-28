@@ -197,10 +197,33 @@
                                 </Button.Style>
                             </Button>
                             
-                            <Button Content="🚀 Process with Current Sender" 
-                                    Command="{Binding ProcessOrderDynamicCommand}"
+                            <Button Content="� Process with Email" 
+                                    Command="{Binding ProcessOrderWithEmailCommand}"
+                                    Padding="10,5" Margin="0,0,8,0"
+                                    Background="#17A2B8" Foreground="White" 
+                                    BorderThickness="0" FontSize="11">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" 
+                                                            CornerRadius="3" 
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button Content="📱 Process with SMS" 
+                                    Command="{Binding ProcessOrderWithSmsCommand}"
                                     Padding="10,5"
-                                    Background="#DC3545" Foreground="White" 
+                                    Background="#FFC107" Foreground="Black" 
                                     BorderThickness="0" FontSize="11">
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -220,7 +243,7 @@
                                 </Button.Style>
                             </Button>
                         </StackPanel>
-                        <TextBlock Text="💡 Switch between Email and SMS senders at runtime!" 
+                        <TextBlock Text="💡 Inject different senders and use them directly!" 
                                   FontStyle="Italic" Foreground="#0066CC" FontSize="10"/>
                     </StackPanel>
                 </Border>

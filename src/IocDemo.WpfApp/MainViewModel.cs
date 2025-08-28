@@ -1,4 +1,5 @@
 using IocDemo.Core.Services;
+using IocDemo.Core.Contracts;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -41,7 +42,8 @@ public class MainViewModel : INotifyPropertyChanged
         ClearOutputCommand = new RelayCommand(ClearOutput);
         SwitchToEmailCommand = new RelayCommand(SwitchToEmail);
         SwitchToSmsCommand = new RelayCommand(SwitchToSms);
-        ProcessOrderDynamicCommand = new RelayCommand(ProcessOrderDynamic, CanPlaceOrder);
+        ProcessOrderWithEmailCommand = new RelayCommand(ProcessOrderWithEmail, CanPlaceOrder);
+        ProcessOrderWithSmsCommand = new RelayCommand(ProcessOrderWithSms, CanPlaceOrder);
         
         // Get message sender type
         _messageSenderType = _orderService.GetMessageSenderType();
@@ -85,9 +87,10 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand ClearOutputCommand { get; }
     public ICommand SwitchToEmailCommand { get; }
     public ICommand SwitchToSmsCommand { get; }
-    public ICommand ProcessOrderDynamicCommand { get; }
+    public ICommand ProcessOrderWithEmailCommand { get; }
+    public ICommand ProcessOrderWithSmsCommand { get; }
 
-    public string CurrentSenderType => _currentSenderType.ToString();
+    public string CurrentSenderType => _currentSenderType;
 
     private void PlaceOrder()
     {
@@ -124,20 +127,20 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void ShowOrders()
     {
-        _logger.LogDebug("Showing order summary via UI");
-        
-        var timestamp = DateTime.Now.ToString("HH:mm:ss");
-        AppendOutput($"[{timestamp}] Retrieving order summary...");
-        
         try
         {
+            _logger.LogDebug("User requested order summary via UI");
+            
+            AppendOutput("📊 Retrieving order summary...");
+            
             var summary = _orderService.GetOrderSummary();
-            AppendOutput($"📊 {summary}\n");
+            AppendOutput($"� {summary}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving order summary via UI");
-            AppendOutput($"❌ Error retrieving summary: {ex.Message}\n");
+            var errorMessage = $"❌ Error retrieving orders: {ex.Message}";
+            AppendOutput(errorMessage);
+            _logger.LogError(ex, "Error in ShowOrders");
         }
     }
 
@@ -147,58 +150,98 @@ public class MainViewModel : INotifyPropertyChanged
         Output = "Output cleared! 🧹\n\n";
     }
 
-    private void AppendOutput(string message)
-    {
-        Output += message + "\n";
-    }
-
     private void SwitchToEmail()
     {
-        _currentSenderType = Core.Services.MessageSenderType.Email;
-        _dynamicOrderService.SwitchDefaultSender(_currentSenderType);
-        AppendOutput($"🔄 Switched to Email sender");
+        _currentSenderType = "Email";
+        AppendOutput($"🔄 Current display switched to Email sender");
         OnPropertyChanged(nameof(CurrentSenderType));
-        _logger.LogInformation("User switched to Email sender");
+        _logger.LogInformation("User switched display to Email sender");
     }
 
     private void SwitchToSms()
     {
-        _currentSenderType = Core.Services.MessageSenderType.Sms;
-        _dynamicOrderService.SwitchDefaultSender(_currentSenderType);
-        AppendOutput($"🔄 Switched to SMS sender");
+        _currentSenderType = "SMS";
+        AppendOutput($"🔄 Current display switched to SMS sender");
         OnPropertyChanged(nameof(CurrentSenderType));
-        _logger.LogInformation("User switched to SMS sender");
+        _logger.LogInformation("User switched display to SMS sender");
     }
 
-    private void ProcessOrderDynamic()
+    private void ProcessOrderWithEmail()
     {
         try
         {
             var orderId = OrderIdInput;
             
-            AppendOutput($"🚀 Processing order {orderId} with current sender ({CurrentSenderType})...");
+            AppendOutput($"� Processing order {orderId} with Email sender...");
             
-            var success = _dynamicOrderService.ProcessOrder(orderId);
+            // 直接使用Email发送器处理订单
+            var result = ProcessOrderWithSpecificSender(orderId, _emailSender);
             
-            if (success)
+            if (!string.IsNullOrEmpty(result))
             {
-                AppendOutput($"✅ Order {orderId} processed successfully!");
-                
-                // Show summary
-                var summary = _dynamicOrderService.GetOrderSummary();
-                AppendOutput($"📊 {summary}");
+                AppendOutput($"✅ Order {orderId} processed successfully with Email!");
+                AppendOutput($"📊 {result}");
             }
             else
             {
-                AppendOutput($"❌ Failed to process order {orderId}");
+                AppendOutput($"❌ Failed to process order {orderId} with Email");
             }
         }
         catch (Exception ex)
         {
-            var errorMessage = $"❌ Error processing order: {ex.Message}";
+            var errorMessage = $"❌ Error processing order with Email: {ex.Message}";
             AppendOutput(errorMessage);
-            _logger.LogError(ex, "Error in ProcessOrderDynamic");
+            _logger.LogError(ex, "Error in ProcessOrderWithEmail");
         }
+    }
+
+    private void ProcessOrderWithSms()
+    {
+        try
+        {
+            var orderId = OrderIdInput;
+            
+            AppendOutput($"📱 Processing order {orderId} with SMS sender...");
+            
+            // 直接使用SMS发送器处理订单
+            var result = ProcessOrderWithSpecificSender(orderId, _smsSender);
+            
+            if (!string.IsNullOrEmpty(result))
+            {
+                AppendOutput($"✅ Order {orderId} processed successfully with SMS!");
+                AppendOutput($"📊 {result}");
+            }
+            else
+            {
+                AppendOutput($"❌ Failed to process order {orderId} with SMS");
+            }
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = $"❌ Error processing order with SMS: {ex.Message}";
+            AppendOutput(errorMessage);
+            _logger.LogError(ex, "Error in ProcessOrderWithSms");
+        }
+    }
+
+    private string ProcessOrderWithSpecificSender(string orderId, IMessageSender sender)
+    {
+        // 模拟订单处理流程
+        _logger.LogInformation("Processing order: {OrderId} with {SenderType}", orderId, sender.SenderType);
+        
+        // 发送消息
+        var message = $"Order {orderId} processed";
+        var sendResult = sender.Send(message);
+        
+        _logger.LogInformation("Order processed successfully: {OrderId} using {SenderType}", 
+            orderId, sender.GetType().Name);
+            
+        return $"Message sent via {sender.SenderType}: {sendResult}";
+    }
+
+    private void AppendOutput(string message)
+    {
+        Output += message + "\n";
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
