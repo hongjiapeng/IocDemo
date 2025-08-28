@@ -38,7 +38,7 @@ public partial class App : Application
 
                 // Register ViewModels
                 services.AddTransient<MainViewModel>();
-                
+
                 // Register Views
                 services.AddTransient<MainWindow>();
             })
