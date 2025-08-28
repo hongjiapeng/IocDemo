@@ -14,8 +14,8 @@ namespace IocDemo.WpfApp;
 public class MainViewModel : INotifyPropertyChanged
 {
     private readonly OrderService _orderService;
-    private readonly EmailSender _emailSender;
-    private readonly SmsSender _smsSender;
+    private readonly IMessageSender _emailSender;
+    private readonly IMessageSender _smsSender;
     private readonly ILogger<MainViewModel> _logger;
     private string _orderIdInput = "ORDER-001";
     private string _output = "Welcome to IoC Demo! 🎉\n\nReady to process orders...\n\n";
@@ -29,7 +29,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// <param name="emailSender">Email sender (injected by DI container)</param>
     /// <param name="smsSender">SMS sender (injected by DI container)</param>
     /// <param name="logger">Logger instance for logging operations</param>
-    public MainViewModel(OrderService orderService, EmailSender emailSender, SmsSender smsSender, ILogger<MainViewModel> logger)
+    public MainViewModel(OrderService orderService, IMessageSender emailSender, IMessageSender smsSender, ILogger<MainViewModel> logger)
     {
         _orderService = orderService;
         _emailSender = emailSender;

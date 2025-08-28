@@ -33,8 +33,9 @@ public partial class App : Application
             {
                 // Register core services (without logging configuration)
                 services.AddIocDemoCore()
-                        .AddSmsSender(); // Use SMS sender as default
-                
+                  .AddSmsSender()    // Use SMS sender as default
+                  .AddEmailSender(); // Also add EmailSender
+
                 // Register ViewModels
                 services.AddTransient<MainViewModel>();
                 
