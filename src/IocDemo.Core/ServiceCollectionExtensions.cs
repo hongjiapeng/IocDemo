@@ -1,8 +1,6 @@
 using IocDemo.Core.Contracts;
 using IocDemo.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace IocDemo.Core;
 
@@ -15,27 +13,12 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Registers core application services (without message sender)
     /// Call AddEmailSender() or AddSmsSender() or AddMessageSender&lt;T&gt;() to register a message sender
+    /// Note: Logging configuration should be done at the application level
     /// </summary>
     /// <param name="services">The service collection</param>
     /// <returns>The service collection for chaining</returns>
     public static IServiceCollection AddIocDemoCore(this IServiceCollection services)
     {
-        // Configure Serilog
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-            .WriteTo.File("logs/iocdemo-.txt", 
-                rollingInterval: RollingInterval.Day,
-                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-            .CreateLogger();
-
-        // Add Serilog to the logging pipeline
-        services.AddLogging(builder =>
-        {
-            builder.ClearProviders();
-            builder.AddSerilog();
-        });
-
         // Register services with different lifetimes
         
         // Repository - Scoped for potential future database contexts

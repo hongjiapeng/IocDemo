@@ -8,12 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IocDemo.WpfApp", "src\IocDe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IocDemo.Core.Tests", "tests\IocDemo.Core.Tests\IocDemo.Core.Tests.csproj", "{A7B6C5D4-2E5F-4D3E-8F5E-BF4D6F7E8C9A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E8F9A0B1-3F6G-4E5F-9G6F-CF5E7F8G9D0E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F9G0B1C2-4G7H-5F6G-AG7G-DF6F8G9H0E1F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{G0H1C2D3-5H8I-6G7H-BH8H-EG7G9H0I1F2G}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +27,7 @@ Global
 		{A7B6C5D4-2E5F-4D3E-8F5E-BF4D6F7E8C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7B6C5D4-2E5F-4D3E-8F5E-BF4D6F7E8C9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B8C3A8C5-0F3D-4B1E-8E3D-9F2C4E5D6A7B} = {E8F9A0B1-3F6G-4E5F-9G6F-CF5E7F8G9D0E}
-		{C9D4B9D6-1F4E-4C2F-9F4E-AF3D5F6E7C8D} = {E8F9A0B1-3F6G-4E5F-9G6F-CF5E7F8G9D0E}
-		{A7B6C5D4-2E5F-4D3E-8F5E-BF4D6F7E8C9A} = {F9G0B1C2-4G7H-5F6G-AG7G-DF6F8G9H0E1F}
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
